@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StudyBuddy AI — Your Intelligent Study Companion</title>
+    <meta name="description" content="AI-powered study companion that helps you learn faster with chat tutoring, document summarization, quizzes, and flashcards." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+    <!-- ── Sidebar ────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1 class="brand-name">StudyBuddy <span class="brand-ai">AI</span></h1>
+        </div>
+
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-section="chat" id="nav-chat">
+                <i class="fas fa-comments"></i>
+                <span>Chat Tutor</span>
+            </button>
+            <button class="nav-item" data-section="documents" id="nav-documents">
+                <i class="fas fa-file-pdf"></i>
+                <span>Documents</span>
+            </button>
+            <button class="nav-item" data-section="quiz" id="nav-quiz">
+                <i class="fas fa-clipboard-question"></i>
+                <span>Quiz Mode</span>
+            </button>
+            <button class="nav-item" data-section="flashcards" id="nav-flashcards">
+                <i class="fas fa-layer-group"></i>
+                <span>Flashcards</span>
+            </button>
+            <button class="nav-item" data-section="dashboard" id="nav-dashboard">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-status">
+                <div class="status-dot"></div>
+                <span>AI Online</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── Mobile header ──────────────────────────────── -->
+    <header class="mobile-header" id="mobile-header">
+        <button class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="mobile-brand">StudyBuddy <span class="brand-ai">AI</span></h1>
+    </header>
+
+    <!-- ── Main Content ───────────────────────────────── -->
+    <main class="main-content">
+
+        <!-- ── Chat Section ───────────────────────────── -->
+        <section class="section active" id="section-chat">
+            <div class="section-header">
+                <h2><i class="fas fa-comments"></i> Chat Tutor</h2>
+                <p class="section-subtitle">Ask me anything — I'll explain it like your best study partner</p>
+            </div>
+
+            <!-- Document context selector -->
+            <div class="context-bar" id="chat-context-bar" style="display:none;">
+                <i class="fas fa-paperclip"></i>
+                <span id="chat-context-name"></span>
+                <button class="context-remove" id="chat-context-remove" title="Remove context">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="chat-container" id="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Welcome message -->
+                    <div class="message assistant">
+                        <div class="message-avatar"><i class="fas fa-brain"></i></div>
+                        <div class="message-bubble">
+                            <p>Hey there! 👋 I'm <strong>StudyBuddy AI</strong>, your personal study companion.</p>
+                            <p>Here's what I can help with:</p>
+                            <ul>
+                                <li>💬 <strong>Explain</strong> any concept in simple terms</li>
+                                <li>📄 <strong>Summarize</strong> your uploaded documents</li>
+                                <li>🧠 <strong>Quiz</strong> you to test your knowledge</li>
+                                <li>🗂️ <strong>Flashcards</strong> for active recall practice</li>
+                            </ul>
+                            <p>Try asking something like: <em>"Explain quantum computing in simple terms"</em></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <textarea
+                        class="chat-input"
+                        id="chat-input"
+                        placeholder="Ask me anything..."
+                        rows="1"
+                    ></textarea>
+                    <button class="chat-send" id="chat-send" title="Send message">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Documents Section ──────────────────────── -->
+        <section class="section" id="section-documents">
+            <div class="section-header">
+                <h2><i class="fas fa-file-pdf"></i> Documents</h2>
+                <p class="section-subtitle">Upload your study material and let AI do the heavy lifting</p>
+            </div>
+
+            <div class="upload-zone" id="upload-zone">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <p class="upload-text">Drag & drop your PDF here</p>
+                <p class="upload-subtext">or click to browse files</p>
+                <input type="file" id="file-input" accept=".pdf" hidden />
+            </div>
+
+            <div class="upload-progress" id="upload-progress" style="display:none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <span class="progress-text" id="progress-text">Uploading...</span>
+            </div>
+
+            <div class="documents-list" id="documents-list">
+                <!-- Documents render here -->
+            </div>
+        </section>
+
+        <!-- ── Quiz Section ───────────────────────────── -->
+        <section class="section" id="section-quiz">
+            <div class="section-header">
+                <h2><i class="fas fa-clipboard-question"></i> Quiz Mode</h2>
+                <p class="section-subtitle">Test your knowledge with AI-generated questions</p>
+            </div>
+
+            <!-- Quiz Setup -->
+            <div class="quiz-setup" id="quiz-setup">
+                <div class="form-group">
+                    <label for="quiz-source-type">Generate from</label>
+                    <div class="toggle-group">
+                        <button class="toggle-btn active" data-value="topic" id="quiz-source-topic">Topic</button>
+                        <button class="toggle-btn" data-value="document" id="quiz-source-document">Document</button>
+                    </div>
+                </div>
+
+                <div class="form-group" id="quiz-topic-group">
+                    <label for="quiz-topic-input">Topic</label>
+                    <input type="text" id="quiz-topic-input" class="form-input" placeholder="e.g., Photosynthesis, World War II, Python loops..." />
+                </div>
+
+                <div class="form-group" id="quiz-doc-group" style="display:none;">
+                    <label>Select document</label>
+                    <select id="quiz-doc-select" class="form-select">
+                        <option value="">Upload a document first</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quiz-num">Questions</label>
+                        <select id="quiz-num" class="form-select">
+                            <option value="3">3</option>
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quiz-difficulty">Difficulty</label>
+                        <select id="quiz-difficulty" class="form-select">
+                            <option value="easy">Easy</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn-primary btn-lg" id="quiz-generate">
+                    <i class="fas fa-wand-magic-sparkles"></i> Generate Quiz
+                </button>
+            </div>
+
+            <!-- Quiz Active -->
+            <div class="quiz-active" id="quiz-active" style="display:none;">
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+                </div>
+                <div class="quiz-counter" id="quiz-counter">Question 1 of 5</div>
+                <div class="quiz-card" id="quiz-card">
+                    <!-- Rendered dynamically -->
+                </div>
+                <div class="quiz-nav">
+                    <button class="btn-secondary" id="quiz-prev" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button class="btn-primary" id="quiz-next">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Quiz Results -->
+            <div class="quiz-results" id="quiz-results" style="display:none;">
+                <div class="results-card">
+                    <div class="results-circle" id="results-circle">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="results-bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="results-fg" cx="50" cy="50" r="45" id="results-fg"></circle>
+                        </svg>
+                        <div class="results-score" id="results-score">0%</div>
+                    </div>
+                    <h3 id="results-title">Quiz Complete!</h3>
+                    <p id="results-subtitle"></p>
+                    <button class="btn-primary" id="quiz-restart">
+                        <i class="fas fa-redo"></i> Try Another Quiz
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Flashcards Section ─────────────────────── -->
+        <section class="section" id="section-flashcards">
+            <div class="section-header">
+                <h2><i class="fas fa-layer-group"></i> Flashcards</h2>
+                <p class="section-subtitle">Active recall practice — flip to reveal the answer</p>
+            </div>
+
+            <!-- Flashcard Setup -->
+            <div class="flashcard-setup" id="flashcard-setup">
+                <div class="form-group">
+                    <label>Generate from</label>
+                    <div class="toggle-group">
+                        <button class="toggle-btn active" data-value="topic" id="fc-source-topic">Topic</button>
+                        <button class="toggle-btn" data-value="document" id="fc-source-document">Document</button>
+                    </div>
+                </div>
+
+                <div class="form-group" id="fc-topic-group">
+                    <label for="fc-topic-input">Topic</label>
+                    <input type="text" id="fc-topic-input" class="form-input" placeholder="e.g., Biology cell structures, JavaScript arrays..." />
+                </div>
+
+                <div class="form-group" id="fc-doc-group" style="display:none;">
+                    <label>Select document</label>
+                    <select id="fc-doc-select" class="form-select">
+                        <option value="">Upload a document first</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fc-num">Number of cards</label>
+                    <select id="fc-num" class="form-select">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+
+                <button class="btn-primary btn-lg" id="fc-generate">
+                    <i class="fas fa-wand-magic-sparkles"></i> Generate Flashcards
+                </button>
+            </div>
+
+            <!-- Flashcard Viewer -->
+            <div class="flashcard-viewer" id="flashcard-viewer" style="display:none;">
+                <div class="fc-counter" id="fc-counter">Card 1 of 10</div>
+                <div class="flashcard-wrapper" id="flashcard-wrapper">
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-front">
+                            <div class="fc-label">TERM</div>
+                            <div class="fc-content" id="fc-front-content"></div>
+                            <div class="fc-hint">Click to flip</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="fc-label">DEFINITION</div>
+                            <div class="fc-content" id="fc-back-content"></div>
+                            <div class="fc-example" id="fc-example"></div>
+                            <div class="fc-hint">Click to flip back</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fc-nav">
+                    <button class="btn-icon" id="fc-prev" title="Previous"><i class="fas fa-chevron-left"></i></button>
+                    <button class="btn-icon" id="fc-shuffle" title="Shuffle"><i class="fas fa-shuffle"></i></button>
+                    <button class="btn-icon" id="fc-next" title="Next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <button class="btn-secondary btn-sm" id="fc-back-setup">
+                    <i class="fas fa-arrow-left"></i> New Cards
+                </button>
+            </div>
+        </section>
+
+        <!-- ── Dashboard Section ──────────────────────── -->
+        <section class="section" id="section-dashboard">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> Dashboard</h2>
+                <p class="section-subtitle">Track your study progress at a glance</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card" id="stat-messages">
+                    <div class="stat-icon"><i class="fas fa-comments"></i></div>
+                    <div class="stat-value" id="stat-messages-value">0</div>
+                    <div class="stat-label">Messages Sent</div>
+                </div>
+                <div class="stat-card" id="stat-docs">
+                    <div class="stat-icon"><i class="fas fa-file-pdf"></i></div>
+                    <div class="stat-value" id="stat-docs-value">0</div>
+                    <div class="stat-label">Documents Uploaded</div>
+                </div>
+                <div class="stat-card" id="stat-quizzes">
+                    <div class="stat-icon"><i class="fas fa-clipboard-question"></i></div>
+                    <div class="stat-value" id="stat-quizzes-value">0</div>
+                    <div class="stat-label">Quizzes Taken</div>
+                </div>
+                <div class="stat-card" id="stat-avg-score">
+                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="stat-value" id="stat-avg-score-value">—</div>
+                    <div class="stat-label">Avg Quiz Score</div>
+                </div>
+                <div class="stat-card" id="stat-flashcards-count">
+                    <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+                    <div class="stat-value" id="stat-flashcards-value">0</div>
+                    <div class="stat-label">Flashcards Studied</div>
+                </div>
+                <div class="stat-card" id="stat-streak">
+                    <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                    <div class="stat-value" id="stat-streak-value">🔥 0</div>
+                    <div class="stat-label">Study Streak</div>
+                </div>
+            </div>
+
+            <div class="recent-activity">
+                <h3>Recent Activity</h3>
+                <div class="activity-list" id="activity-list">
+                    <div class="activity-empty">
+                        <i class="fas fa-rocket"></i>
+                        <p>Start studying to see your activity here!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ── Loading overlay ────────────────────────────── -->
+    <div class="loading-overlay" id="loading-overlay" style="display:none;">
+        <div class="loading-spinner">
+            <div class="spinner-ring"></div>
+            <p class="loading-text" id="loading-text">Generating...</p>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/chat.js"></script>
+    <script src="/js/documents.js"></script>
+    <script src="/js/quiz.js"></script>
+    <script src="/js/flashcards.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
